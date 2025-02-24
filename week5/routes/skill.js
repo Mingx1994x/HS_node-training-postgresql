@@ -2,8 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 const { dataSource } = require('../db/data-source');
-const { isUndefined, isNotValidString, isNotValidInteger } = require('../utils/validate');
-const logger = require('../utils/logger')('CreditPackage')
+const logger = require('../utils/logger')('Skill')
+const { isUndefined, isNotValidString } = require('../utils/validate');
 
 router.get('/', async (req, res, next) => {
   try {
