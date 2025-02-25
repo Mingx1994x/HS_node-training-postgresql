@@ -1,13 +1,13 @@
 const express = require('express');
-const router = express.Router();
-
 const bcrypt = require('bcrypt');
+
 
 const { dataSource } = require('../db/data-source');
 const logger = require('../utils/logger')('User');
 
 const { isUndefined, isNotValidUserName, isNotValidEmail, isNotValidUserPassword } = require('../utils/validate');
 
+const router = express.Router();
 router.post('/signup', async (req, res, next) => {
   try {
     const { name, email, password } = req.body;

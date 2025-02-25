@@ -22,5 +22,10 @@ module.exports = {
     //需要包含英文數字大小寫，最短8個字，最長16個字
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/;
     return !passwordRegex.test(value)
+  },
+  isValidImgUrl: (value) => {
+    let imgFormat = value.split('.').pop();
+    return !(value.startsWith('https') && (imgFormat === 'png' || imgFormat === 'jpg'))
   }
+
 }
