@@ -41,20 +41,20 @@ router.post('/coaches/courses', async (req, res, next) => {
       })
       return
     }
+    //技能id由介面渲染設定?
+    // const findSkill = await skillRepo.findOne({
+    //   where: {
+    //     id: skill_id
+    //   }
+    // })
 
-    const findSkill = await skillRepo.findOne({
-      where: {
-        id: skill_id
-      }
-    })
-
-    if (!findSkill) {
-      res.status(400).json({
-        status: 'failed',
-        message: '技能不存在'
-      })
-      return
-    }
+    // if (!findSkill) {
+    //   res.status(400).json({
+    //     status: 'failed',
+    //     message: '技能不存在'
+    //   })
+    //   return
+    // }
 
     const newCourse = courseRepo.create({
       user_id,
@@ -151,6 +151,74 @@ router.post('/coaches/:userId', async (req, res, next) => {
         coach: coachResult
       },
     })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/coaches/courses/:courseId', async (req, res, next) => {
+  try {
+    const { courseId } = req.params;
+    const { skill_id, name, description, start_at, end_at, max_participants, meeting_url } = req.body;
+
+    if (isUndefined(skill_id) || isNotValidString(skill_id) || isUndefined(name) || isNotValidString(name) || isUndefined(description) || isNotValidString(description) || isUndefined(start_at) || isNotValidString(start_at) || isUndefined(end_at) || isNotValidString(end_at) || isUndefined(max_participants) || isNotValidInteger(max_participants) || (meeting_url && isNotValidUrl(meeting_url))) {
+      res.status(400).json({
+        status: 'failed',
+        message: '欄位未填寫正確'
+      })
+      return
+    }
+
+    const findCourse = await courseRepo.findOne({
+      where: {
+        id: courseId
+      }
+    })
+
+    if (!findCourse) {
+      res.status(400).json({
+        status: 'failed',
+        message: '課程不存在'
+      })
+      return
+    }
+
+    const courseUpdataResult = await courseRepo.update(
+      {
+        id: courseId
+      },
+      {
+        skill_id,
+        name,
+        description,
+        start_at,
+        end_at,
+        meeting_url,
+        max_participants
+      }
+    )
+
+    if (courseUpdataResult.affected === 0) {
+      res.status(400).json({
+        status: 'failed',
+        message: '更新課程失敗'
+      })
+      return
+    }
+
+    const courseResult = await courseRepo.findOne({
+      where: {
+        id: courseId
+      }
+    });
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        course: courseResult
+      }
+    })
+
   } catch (error) {
     next(error)
   }
