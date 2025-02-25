@@ -23,9 +23,12 @@ module.exports = {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/;
     return !passwordRegex.test(value)
   },
-  isValidImgUrl: (value) => {
+  isNotValidUrl: (value) => {
+    return !value.startsWith('https')
+  },
+  isNotValidImg: (value) => {
     let imgFormat = value.split('.').pop();
-    return !(value.startsWith('https') && (imgFormat === 'png' || imgFormat === 'jpg'))
+    return !((imgFormat === 'png' || imgFormat === 'jpg'))
   }
 
 }
